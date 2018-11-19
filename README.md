@@ -1,4 +1,7 @@
-# coconut-data
+# Coconut Developers
+A Platform for Coconut developers to conveniently CRUD hospital/center data and manage user data.
+
+Omitted FirebaseConfig.js due to security reasons.
 
 ## Project setup
 ```
