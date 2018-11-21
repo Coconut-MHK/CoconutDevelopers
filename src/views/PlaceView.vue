@@ -92,6 +92,9 @@ export default {
                 background: black;
             }
         }
+        small {
+            margin-bottom: 1vh;
+        }
     }
     .child-view {
         transition: all .5s;
