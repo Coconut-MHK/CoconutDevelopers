@@ -55,10 +55,11 @@ export default {
         margin-bottom: 5vh;
         text-align: left;   
         padding: 0 1vw;
-        border: 1px solid #777;
-        transition: 0.25s;
+        border-radius: 2px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
         &:hover {
-            box-shadow: 10px 10px 6px -6px #777; 
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
         }   
         .data-list-item-header {
             display: flex;
