@@ -1,13 +1,13 @@
 <template>
     <div class="data-container">
         <router-link
-            class="link-button"
+            class="box-shadow"
             :to="`/home/data/${this.param}/new-data`"
-            v-if="firstPage"
+            v-if="isFirstPage"
             @click.native="toDataInput"
             >데이터 등록</router-link>
         <h1>{{this.header}} 데이터 관리</h1>
-        <small v-if="dataProgress.status">Progress: {{dataProgress.index}}/3</small>
+        <small v-if="!isFirstPage">Progress: {{dataProgress.index}}/3</small>
         <hr width="15%" noshadow color="black">
         <transition :name="transitionName">
             <router-view :componentFile="capitalizedParam" class="child-view"></router-view>
@@ -23,10 +23,11 @@ export default {
     components: {
         ModalComponent
     },
-    
+    mounted() {
+        console.log(this.$route);
+    },
     data() {
         return {
-            firstPage: true,
             transitionName: 'slide-left',
             param: this.$route.params.place,
         }
@@ -44,6 +45,9 @@ export default {
         },
         dataProgress() {
             return this.$store.state.dataProgress
+        },
+        isFirstPage() {
+            return this.$route.meta.firstPage
         }
     },
     watch: {
@@ -51,11 +55,11 @@ export default {
             const toDepth = to.path.split('/').length
             const fromDepth = from.path.split('/').length
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+            this.param = to.params.place;
         }
     },
     methods: {
         toDataInput() {
-            this.firstPage = !this.firstPage;
             this.$store.commit('setDataProgress', {
                 status: true,
                 index: 1
@@ -79,7 +83,7 @@ export default {
             top: 9vh;
             right: 7vw;
             width: 6vw;
-            font-size: 2vmin;
+            font-size: 0.8rem;
             text-decoration: none;
             background:rgb(4, 153, 103);
             padding: 16px;
@@ -87,9 +91,6 @@ export default {
             transition: 0.5s;
             &:visited {
                 color: white;
-            }
-            &:hover {
-                background: black;
             }
         }
         small {

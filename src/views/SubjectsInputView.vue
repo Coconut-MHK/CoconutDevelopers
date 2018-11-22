@@ -11,7 +11,8 @@
             >
         </div>
         <div class="checkbox-navigation">
-            <router-link 
+            <router-link
+            class="box-shadow"
             to="/home/data/hospital/doctors"
             @click.native="toDoctorsInput">다음</router-link>
         </div>
@@ -25,6 +26,9 @@ export default {
             treatments: []
         }
     },
+    mounted() {
+        this.$store.commit('setDataProgress', { index: 2 })
+    },
     computed: {
         treatmentSubjects() {
             return this.$store.state.hospitalTreatments
@@ -32,17 +36,14 @@ export default {
     },
     methods: {
         toDoctorsInput() {
-            this.$store.commit('setHospitalData', this.treatments)
-            this.$store.commit('setDataProgress', {
-                status: true,
-                index: 3
-            })
+            this.$store.commit('setHospitalData', { treatments: this.treatments })
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/css/Scheme.scss';
     .checkbox-container {
         display: flex;
         flex-direction: row;
@@ -87,9 +88,8 @@ export default {
             a {
                 text-decoration: none;
                 color: white;
-                background: green;
+                background: $VueGreen;
                 padding: 1vh 2vw;
-
             }
         }
     }

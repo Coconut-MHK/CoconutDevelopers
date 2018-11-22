@@ -4,6 +4,7 @@
             <form @submit.prevent="addDoctorData">
                 <fieldset class="InputContainer">
                     <legend><b>[ 의료진 정보 ]</b></legend>
+                    <small>예) 정보1, 정보2, ...</small>
                     <div class="InputWrapper">
                         <label for="name">이름</label>
                         <input type="text" id="name" v-model.lazy="doctorInput.name">
@@ -20,11 +21,12 @@
                         <label for="scholarRelated">학회활동</label>
                         <input type="text" id="scholarRelated" v-model.lazy="doctorInput.scholarRelated">
                     </div>
-                    <input type="submit" value="등록">
+                    <input class="InputSubmit" type="submit" value="등록">
                 </fieldset>
             </form>
         </div>
         <div class="DisplayContainer">
+            <h2 v-if="isEmpty">의료진 정보를 입력해주세요.</h2>
             <div v-for="doctor in doctorData" :key="doctor.index" class="doctor-information">
                 <div class="doctor-information-col1">
                     <h1>{{ doctor.name }}</h1>
@@ -54,7 +56,7 @@
                     </ul>
                 </div>
             </div>
-            <button @click="showModal"></button>
+            <button v-if="!isEmpty" class="confirm-button box-shadow" @click="showModal(), sendDataToStore()">확인</button>
         </div>
         <confirm-modal :displayCondition="displayModal"></confirm-modal>
     </div>
@@ -78,10 +80,16 @@ export default {
             displayModal: false
         }
     },
+    mounted() {
+        this.$store.commit('setDataProgress', { index: 3 })
+    },
     components: {
         ConfirmModal
     },
     computed: {
+        isEmpty() {
+            return this.doctorData == false
+        },
         educationArr() {
             return this.doctorInput.education.split(', ')
         },
@@ -122,13 +130,14 @@ export default {
             this.displayModal = !this.displayModal;
         },
         sendDataToStore() {
-
+            this.$store.commit('setDoctorsData', this.doctorData)
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/css/Scheme.scss';
     .doctorData-Container {
         width: 100vw;
         display: flex;
@@ -151,6 +160,14 @@ export default {
                         margin-bottom: 1vh;
                     }
                 }
+                .InputSubmit {
+                    margin-top: 1.5vh;
+                    padding: 1vh 2vw;
+                    background: $VueGreen;
+                    color: white;
+                    border: none;
+                    border-radius: 2px;
+                }
             }
         }
         .DisplayContainer {
@@ -172,6 +189,13 @@ export default {
                 li {
                     list-style: none;
                 }
+            }
+            .confirm-button {
+                margin-top: 1.5vh;
+                padding: 1vh 2vw;
+                background: $VueGreen;
+                color: white;
+                border: none;
             }
             .doctor-information + .doctor-information {
                 margin-top: 5vh;

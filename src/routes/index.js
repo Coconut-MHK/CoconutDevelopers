@@ -26,7 +26,8 @@ const routes = [
         children: [
           {
             path: '',
-            component: () => import('../views/DataView.vue')
+            component: () => import('../views/DataView.vue'),
+            meta: { firstPage: true }
           },
           {
             path: 'new-data',

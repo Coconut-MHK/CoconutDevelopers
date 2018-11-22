@@ -12,6 +12,9 @@ export default {
             default: () => null
         },
     },
+    mounted() {
+        this.$store.commit('setDataProgress', { index: 1 })
+    },
     data() {
         return {
             param: this.$route.params.place,

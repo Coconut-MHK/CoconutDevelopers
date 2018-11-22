@@ -59,6 +59,9 @@ export default {
             color: black;
         }
     }
+    a.router-link-active {
+        color: black;
+    }
 }
 .router a{
     text-decoration: none;
@@ -66,11 +69,8 @@ export default {
     margin-right: 18px;
     margin-left: 18px;
     transition-duration: 0.25s;
-}
-.router a:active {
-    color: black;
-}
-.router a:hover {
-    color: black;
+    &:hover {
+        color: black;
+    }
 }
 </style>

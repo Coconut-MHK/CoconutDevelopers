@@ -21,6 +21,7 @@ export const store = new Vuex.Store({
         user: null,
         images: null,
         hospitalData: null,
+        doctorsData: null,
         hospitalTreatments: [
             '공황장애', 
             '니코딘중독', 
@@ -62,6 +63,9 @@ export const store = new Vuex.Store({
                 ...state.hospitalData,
                 ...payload
             }
+        },
+        setDoctorsData(state, payload) {
+            state.doctorsData = payload
         },
         setImages(state, payload) {
             state.images = payload
