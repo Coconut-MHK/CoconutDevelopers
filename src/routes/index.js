@@ -3,8 +3,7 @@ import Router from 'vue-router'
 import firebase from 'firebase'
 
 const routes = [
-  // { path: '*', redirect: '/login' },
-  { path: '/', redirect: '/login' },
+  { path: '*', redirect: '/home' },
   { 
     path: '/login',
     name: 'login',
@@ -23,6 +22,10 @@ const routes = [
       {
         path: 'data/:place',
         component: () => import('../views/PlaceView.vue'),
+        beforeEnter: (to, from, next) => {
+          if (from.name !== "Home") { next('/home') }
+          next()
+        },
         children: [
           {
             path: '',
@@ -32,17 +35,25 @@ const routes = [
           {
             path: 'new-data',
             name: 'DataInput',
-            component: () => import('../views/DataInputView.vue')
+            component: () => import('../views/PlaceInputView.vue')
           },
           {
             path: 'subjects',
             name: 'SubjectsInput',
-            component: () => import('../views/SubjectsInputView.vue')
+            component: () => import('../views/SubjectsInputView.vue'),
+            beforeEnter: (to, from, next) => {
+              if (from.name !== "DataInput") { next('/home') }
+              next()
+            }
           },
           {
             path: 'doctors',
             name: 'DoctorsInput',
-            component: () => import('../views/DoctorInputView.vue')
+            component: () => import('../views/DoctorInputView.vue'),
+            beforeEnter: (to, from, next) => {
+              if (from.name !== "SubjectsInput") { next('/home') }
+              next()
+            }
           }
         ]
       }

@@ -1,7 +1,7 @@
 <template>
     <div class="checkbox-container label">
         <label class="checkbox-title">진료항목</label>
-        <div class="checkbox-wrapper" :key="value" v-for="value of treatmentSubjects">
+        <div class="checkbox-wrapper" :key="value" v-for="value of treatmentList">
             <label :for="value">{{value}}</label>
             <input
             type="checkbox" 
@@ -13,13 +13,14 @@
         <div class="checkbox-navigation">
             <router-link
             class="box-shadow"
-            to="/home/data/hospital/doctors"
+            :to="`/home/data/${currentParam}/doctors`"
             @click.native="toDoctorsInput">다음</router-link>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
 export default {
     data() {
         return {
@@ -30,13 +31,12 @@ export default {
         this.$store.commit('setDataProgress', { index: 2 })
     },
     computed: {
-        treatmentSubjects() {
-            return this.$store.state.hospitalTreatments
-        }
+        ...mapState(['currentParam']),
+        ...mapGetters(['treatmentList'])
     },
     methods: {
         toDoctorsInput() {
-            this.$store.commit('setHospitalData', { treatments: this.treatments })
+            this.$store.commit('setPlaceData', { treatments: this.treatments })
         }
     }
 }

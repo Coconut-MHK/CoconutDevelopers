@@ -19,8 +19,10 @@ export const store = new Vuex.Store({
         },
         error: null,
         user: null,
+        currentParam: null,
+
         images: null,
-        hospitalData: null,
+        placeData: {},
         doctorsData: null,
         hospitalTreatments: [
             '공황장애', 
@@ -40,9 +42,47 @@ export const store = new Vuex.Store({
             '집중틱장애', 
             '치매'
         ],
+        centerTreatments: [
+            '가족문제',
+            '강박증',
+            '공황장애',
+            '과대망상',
+            '낮은 자존감',
+            '대인관계 문제',
+            '부부 문제',
+            '분노조절장애',
+            '불안증',
+            '삶의 전환기 문제',
+            '섭식장애',
+            '성격 문제',
+            '성폭력 피해',
+            '심리검사',
+            '아동상담',
+            '우울증',
+            '의욕상실',
+            '이성관계',
+            '인터넷 중독',
+            '지나친 걱정, 두려움',
+            '진로 및 직장생활 스트레스',
+            '학교폭력'
+        ]
     },
     getters: {
-        getUser: state => state.user
+        header: state => {
+             if (state.currentParam === 'hospital') {
+                return "정신과 병원"
+            } else if (state.currentParam === 'center') {
+                return '심리상담센터'
+            }
+        },
+        capitalizedParam: state => {
+            return state.currentParam.charAt(0).toUpperCase() + state.currentParam.slice(1);
+        },
+        treatmentList: state => {
+            return state.currentParam == 'hospital'
+                ? state.hospitalTreatments
+                : state.centerTreatments
+        }
     },
     // 비동기 처리 후 받는 값으로 하는 state 변경 로직
     mutations: {
@@ -58,9 +98,9 @@ export const store = new Vuex.Store({
         setLoading(state) {
             state.loading = !state.loading
         },
-        setHospitalData(state, payload) {
-            state.hospitalData = {
-                ...state.hospitalData,
+        setPlaceData(state, payload) {
+            state.placeData = {
+                ...state.placeData,
                 ...payload
             }
         },
@@ -78,6 +118,9 @@ export const store = new Vuex.Store({
         },
         addDeveloper(state, payload) {
             state.developersUid.push(payload)
+        },
+        setCurrentParam(state, payload) {
+            state.currentParam = payload
         }
     },
     // 비동기 처리
@@ -112,19 +155,35 @@ export const store = new Vuex.Store({
             })
             commit('setLogged', true)
         },
+        createDoctorData(state, placeId) {
+            const doctors = this.state.doctorsData;
+            for (let doctor of doctors) {
+                const ref = firebase.database().ref(`doctors/${placeId}/`).push();
+                const doctorId = ref.key;
+                ref.set({
+                    ...doctor,
+                    doctorId,
+                })
+            }
+        },
         createPlaceData({ commit }, payload) {
-            const { reference, data } = payload;
+            const { reference } = payload;
             const images = this.state.images;
-            
+
             commit('setLoading', true);
             const ref = firebase.database().ref(`${reference}Information/`).push();
             const placeId = ref.key;
             ref.set({
-                ...data,
+                // ...data,
                 placeId,
                 images: ""
             })
-            for (const item of images) {
+
+            // Creating Doctor DB Information
+            this.dispatch('createDoctorData', placeId)
+
+            // Uploading Images to Place DB
+            for (let item of images) {
                 const itemIndex = images.indexOf(item).toString();
                 firebase.storage().ref(`/${reference}/${placeId}`).put(item)
                     .then(response => {
@@ -139,10 +198,11 @@ export const store = new Vuex.Store({
                         if (itemIndex == images.length - 1) {
                             commit('setImages', []);
                             commit('setLoading', false);
+                            router.push(`/home/data/${this.state.currentParam}/`)
                         }
                     })   
                     .catch(error => console.log(error)) 
             }
-        }
+        },
     }
 })

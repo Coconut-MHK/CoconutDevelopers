@@ -29,9 +29,9 @@
             <h2 v-if="isEmpty">의료진 정보를 입력해주세요.</h2>
             <div v-for="doctor in doctorData" :key="doctor.index" class="doctor-information">
                 <div class="doctor-information-col1">
-                    <h1>{{ doctor.name }}</h1>
+                    <h1 class="doctor-name">{{ doctor.name }}</h1>
                     <small>{{ doctor.title }}</small>
-                    <p v-for="education in doctor.education" :key="education.index">
+                    <p class="doctor-education" v-for="education in doctor.education" :key="education.index">
                         {{ education }}
                     </p>
                 </div>
@@ -56,14 +56,14 @@
                     </ul>
                 </div>
             </div>
-            <button v-if="!isEmpty" class="confirm-button box-shadow" @click="showModal(), sendDataToStore()">확인</button>
+            <button v-if="!isEmpty" class="confirm-button box-shadow" @click="sendDataToStore">확인</button>
         </div>
-        <confirm-modal :displayCondition="displayModal"></confirm-modal>
+        <modal></modal>
     </div>
 </template>
 
 <script>
-import ConfirmModal from '../components/ConfirmModal.vue';
+import Modal from '../components/Modal.vue';
 export default {
     data() {
         return {
@@ -76,15 +76,14 @@ export default {
                 presentation: "",
                 scholarRelated: ""
             },
-            doctorData: [],
-            displayModal: false
+            doctorData: []
         }
     },
     mounted() {
         this.$store.commit('setDataProgress', { index: 3 })
     },
     components: {
-        ConfirmModal
+        Modal
     },
     computed: {
         isEmpty() {
@@ -126,11 +125,11 @@ export default {
                 scholarRelated: ""
             };
         },
-        showModal() {
-            this.displayModal = !this.displayModal;
-        },
         sendDataToStore() {
-            this.$store.commit('setDoctorsData', this.doctorData)
+            this.$store.commit('setDoctorsData', this.doctorData);
+            this.$store.dispatch('createPlaceData', {
+                reference: this.$route.params.place,
+            });
         }
     }
 }
@@ -178,13 +177,25 @@ export default {
                 box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                 display: flex;
                 .doctor-information-col1 {
-                    flex: 1
+                    flex: 1;
+                    .doctor-name {
+                        margin-bottom: 1vh;
+                    }
+                    .doctor-education + .doctor-education {
+                        margin-top: 0;
+                    }
                 }
                 .doctor-information-col2 {
-                    flex: 1
+                    flex: 1;
+                    small {
+                        font-weight: bold;
+                    }
                 }
                 .doctor-information-col3 {
-                    flex: 1
+                    flex: 1;
+                    small {
+                        font-weight: bold;
+                    }
                 }
                 li {
                     list-style: none;

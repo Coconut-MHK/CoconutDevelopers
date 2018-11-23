@@ -2,12 +2,12 @@
     <div class="data-container">
         <router-link
             class="box-shadow"
-            :to="`/home/data/${this.param}/new-data`"
+            :to="`/home/data/${param}/new-data`"
             v-if="isFirstPage"
             @click.native="toDataInput"
             >데이터 등록</router-link>
-        <h1>{{this.header}} 데이터 관리</h1>
-        <small v-if="!isFirstPage">Progress: {{dataProgress.index}}/3</small>
+        <h1>{{ header }} 데이터 관리</h1>
+        <small v-if="!isFirstPage">Progress: {{ progress.index }}/3</small>
         <hr width="15%" noshadow color="black">
         <transition :name="transitionName">
             <router-view :componentFile="capitalizedParam" class="child-view"></router-view>
@@ -18,34 +18,26 @@
 
 <script>
 import ModalComponent from '../components/Modal.vue';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     components: {
         ModalComponent
     },
-    mounted() {
-        console.log(this.$route);
+    created() {
+        this.$store.commit('setCurrentParam', this.$route.params.place)
     },
     data() {
         return {
             transitionName: 'slide-left',
-            param: this.$route.params.place,
         }
     },
     computed: {
-        header() {
-            if (this.param === 'hospital') {
-                return "정신과 병원"
-            } else if (this.param === 'center') {
-                return '심리상담센터'
-            }
-        },
-        capitalizedParam() {
-            return this.param.charAt(0).toUpperCase() + this.param.slice(1);
-        },
-        dataProgress() {
-            return this.$store.state.dataProgress
-        },
+        ...mapState({
+            param: 'currentParam',
+            progress: 'dataProgress'
+        }),
+        ...mapGetters(['header', 'capitalizedParam']),
         isFirstPage() {
             return this.$route.meta.firstPage
         }
@@ -55,7 +47,7 @@ export default {
             const toDepth = to.path.split('/').length
             const fromDepth = from.path.split('/').length
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-            this.param = to.params.place;
+            this.$store.commit('setCurrentParam', this.$route.params.place)
         }
     },
     methods: {

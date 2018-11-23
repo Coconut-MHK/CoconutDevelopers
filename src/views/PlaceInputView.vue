@@ -1,17 +1,17 @@
 <template>
-    <div class="hospital-container">
-        <form class="input-container label" @submit="submitData">
-            <label>병원 이름</label>
+    <div class="placeInput-container">
+        <form class="input-container label" @submit.prevent="submitData">
+            <label>{{ header }} 이름</label>
             <input required type="text" id="name" v-model="inputData.name">
-            <label>병원 주소</label>
+            <label>{{ header }} 주소</label>
             <input required type="text" id="address" v-model="inputData.address">
-            <label>병원 웹사이트</label>
+            <label>{{ header }} 웹사이트</label>
             <input required placeholder="https://" type="url" id="websiteUrl" v-model="inputData.websiteUrl">
-            <label>병원 영업시간</label>
+            <label>{{ header }} 영업시간</label>
             <input required type="text" id="operatingHours" v-model="inputData.operatingHours">
-            <label>병원 연락처 (전화번호)</label>
+            <label>{{ header }} 연락처 (전화번호)</label>
             <input required type="text" id="contacts" v-model="inputData.contacts">
-            <label>병원 소개</label>
+            <label>{{ header }} 소개</label>
             <textarea required type="text" v-model="inputData.description"></textarea>
             <label>사진 업로드</label>
             <input required multiple type="file" accept="image/gif, image/jpeg, image/png" @change="previewFiles">
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 export default {
     data() {
         return {
@@ -37,19 +37,18 @@ export default {
             }
         }
     },
-    computed: mapState([
-        'loading', 'hospitalTreatments'
-    ]),
+    mounted() {
+        this.$store.commit('setDataProgress', { index: 1 })
+    },
+    computed: {
+        ...mapState(['loading', 'Treatments', 'currentParam']),
+        ...mapGetters(['header'])
+    },
     methods: {
-        submitData(e) {
-            // this.$store.dispatch('createPlaceData', {
-            //     reference: "hospital",
-            //     data: this.inputData
-            // });
-            e.preventDefault();
-            this.$store.commit('setHospitalData', this.inputData)
+        submitData() {
+            this.$store.commit('setPlaceData', this.inputData)
             this.$store.commit('setDataProgress', { index: 2 });
-            this.$router.push('/home/data/hospital/subjects');
+            this.$router.push(`/home/data/${this.currentParam}/subjects`);
         },
         previewFiles(e) {
             let files = e.target.files;
@@ -63,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hospital-container {
+.placeInput-container {
     margin: 0 0 1vh 0;
     display: flex;
     flex-wrap: wrap;
