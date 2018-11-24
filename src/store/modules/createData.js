@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import router from '../routes/index';
+import router from '../../routes/index';
 
 const state = {
     dataProgress: {
@@ -9,6 +9,7 @@ const state = {
     images: null,
     placeData: {},
     doctorsData: null,
+    currentParam: null,
     hospitalTreatments: [
         '공황장애', 
         '니코딘중독', 
@@ -27,10 +28,49 @@ const state = {
         '집중틱장애', 
         '치매'
     ],
-    centerTreatments: []
+    centerTreatments: [
+        '가족문제',
+        '강박증',
+        '공황장애',
+        '과대망상',
+        '낮은 자존감',
+        '대인관계 문제',
+        '부부 문제',
+        '분노조절장애',
+        '불안증',
+        '삶의 전환기 문제',
+        '섭식장애',
+        '성격 문제',
+        '성폭력 피해',
+        '심리검사',
+        '아동상담',
+        '우울증',
+        '의욕상실',
+        '이성관계',
+        '인터넷 중독',
+        '지나친 걱정, 두려움',
+        '진로 및 직장생활 스트레스',
+        '학교폭력'
+    ]
 };
 
-const getters = {};
+const getters = {
+    header: state => {
+        if (state.currentParam === 'hospital') {
+           return "정신과 병원"
+       } else if (state.currentParam === 'center') {
+           return '심리상담센터'
+       }
+   },
+   capitalizedParam: state => {
+       return state.currentParam.charAt(0).toUpperCase() + state.currentParam.slice(1);
+   },
+   treatmentList: state => {
+       return state.currentParam == 'hospital'
+           ? state.hospitalTreatments
+           : state.centerTreatments
+   }
+};
 
 const mutations = {
     setPlaceData(state, payload) {
@@ -51,6 +91,12 @@ const mutations = {
             ...payload
         }
     },
+    setCurrentParam(state, payload) {
+        state.currentParam = payload
+    },
+    switchLoading({ rootState }, payload) {
+        rootState.loading = payload;
+    }
 };
 
 const actions = {
@@ -69,11 +115,11 @@ const actions = {
         const { reference } = payload;
         const images = this.state.images;
 
-        commit('setLoading', true);
+        commit('switchLoading', true);
         const ref = firebase.database().ref(`${reference}Information/`).push();
         const placeId = ref.key;
         ref.set({
-            // ...data,
+            ...this.state.placeData,
             placeId,
             images: ""
         })
@@ -96,7 +142,7 @@ const actions = {
                 .then(() => {
                     if (itemIndex == images.length - 1) {
                         commit('setImages', []);
-                        commit('setLoading', false);
+                        commit('switchLoading', false);
                         router.push('/home/data/hopsital/')
                         
                     }

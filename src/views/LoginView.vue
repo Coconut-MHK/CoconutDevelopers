@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'login',
     data() {
@@ -26,16 +27,11 @@ export default {
         }
     },
     computed: {
-        error() {
-            return this.$store.state.error
-        },
-        loading() {
-            return this.$store.state.loading
-        }
+        ...mapState(['auth/error', 'loading'])
     },
     methods: {
         login() {
-            this.$store.dispatch('userSignIn', {
+            this.$store.dispatch('auth/userSignIn', {
                 email: this.email,
                 password: this.password
             })
@@ -49,7 +45,7 @@ export default {
         },
         alert(value) {
             if (!value) {
-                this.$store.commit('setError', null)
+                this.$store.commit('auth/setError', null)
             }
         }
     }

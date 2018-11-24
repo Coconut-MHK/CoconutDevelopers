@@ -18,14 +18,15 @@
 
 <script>
 import ModalComponent from '../components/Modal.vue';
-import { mapState, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers('createData')
 
 export default {
     components: {
         ModalComponent
     },
     created() {
-        this.$store.commit('setCurrentParam', this.$route.params.place)
+        this.setCurrentParam(this.$route.params.place)
     },
     data() {
         return {
@@ -47,12 +48,13 @@ export default {
             const toDepth = to.path.split('/').length
             const fromDepth = from.path.split('/').length
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-            this.$store.commit('setCurrentParam', this.$route.params.place)
+            this.setCurrentParam(this.$route.params.place)
         }
     },
     methods: {
+        ...mapActions(['setCurrentParam', 'setDataProgress']),
         toDataInput() {
-            this.$store.commit('setDataProgress', {
+            this.setDataProgress({
                 status: true,
                 index: 1
             })

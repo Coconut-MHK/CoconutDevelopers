@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './routes/index'
-import { store } from './store/index'
+import store from './store/index'
 import firebase from 'firebase';
 
 const config = {
@@ -26,7 +26,7 @@ const unsubscribe = firebase.auth()
     render: h => h(App),
     created () {
       if (user) {
-        store.dispatch('userAutoSignIn', user)
+        store.dispatch('auth/userAutoSignIn', user)
       }
     }
   })

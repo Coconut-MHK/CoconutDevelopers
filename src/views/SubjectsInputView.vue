@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers('createData')
 export default {
     data() {
         return {
@@ -28,15 +29,16 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('setDataProgress', { index: 2 })
+        this.setDataProgress({ index: 2 })
     },
     computed: {
         ...mapState(['currentParam']),
         ...mapGetters(['treatmentList'])
     },
     methods: {
+        ...mapActions(['setPlaceData', 'setDataProgress']),
         toDoctorsInput() {
-            this.$store.commit('setPlaceData', { treatments: this.treatments })
+            this.setPlaceData({ treatments: this.treatments })
         }
     }
 }

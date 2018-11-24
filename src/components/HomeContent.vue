@@ -9,15 +9,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-    data() {
-        return {
-            user: {
-                name: this.$store.state.user.displayName
-            }
-        }
+    computed: {
+        ...mapState(['auth/user'])
     }
-
 }
 </script>
 

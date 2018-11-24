@@ -64,6 +64,8 @@
 
 <script>
 import Modal from '../components/Modal.vue';
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions } = createNamespacedHelpers('createData')
 export default {
     data() {
         return {
@@ -80,7 +82,7 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('setDataProgress', { index: 3 })
+        this.setDataProgress({ index: 3 });
     },
     components: {
         Modal
@@ -106,6 +108,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['setDoctorsData', 'createPlaceData']),
         addDoctorData() {
             this.doctorData.push({
                 ...this.doctorInput,
@@ -126,8 +129,8 @@ export default {
             };
         },
         sendDataToStore() {
-            this.$store.commit('setDoctorsData', this.doctorData);
-            this.$store.dispatch('createPlaceData', {
+            this.setDoctorsData(this.doctorData);
+            this.createPlaceData({
                 reference: this.$route.params.place,
             });
         }

@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers('createData')
 export default {
     data() {
         return {
@@ -41,13 +42,14 @@ export default {
         this.$store.commit('setDataProgress', { index: 1 })
     },
     computed: {
-        ...mapState(['loading', 'Treatments', 'currentParam']),
+        ...mapState(['Treatments', 'currentParam']),
         ...mapGetters(['header'])
     },
     methods: {
+        ...mapActions(['setPlaceData', 'setDataProgress', 'setImages']),
         submitData() {
-            this.$store.commit('setPlaceData', this.inputData)
-            this.$store.commit('setDataProgress', { index: 2 });
+            this.setPlaceData(this.inputData)
+            this.setDataProgress({ index: 2 });
             this.$router.push(`/home/data/${this.currentParam}/subjects`);
         },
         previewFiles(e) {
@@ -55,7 +57,7 @@ export default {
             for (let i = 0; i < files.length; i++) {
                 this.images.push(files[i]);
             }
-            this.$store.commit("setImages", this.images);
+            this.setImages(this.images);
         }
     }
 }

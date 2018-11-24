@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import router from '../routes/index';
+import router from '../../routes/index';
 
 const state = {
     developersUid: [
@@ -7,7 +7,6 @@ const state = {
         "qn6kO7Rm62RInzssz8UPSOvMgoJ2"
     ],
     logged: false,
-    loading: false,
     error: null,
     user: null,
 };
@@ -26,9 +25,6 @@ const mutations = {
     setError(state, payload) {
         state.error = payload
     },
-    setLoading(state) {
-        state.loading = !state.loading
-    },
     addDeveloper(state, payload) {
         state.developersUid.push(payload)
     }
@@ -36,6 +32,7 @@ const mutations = {
 
 const actions = {
     userSignIn({ commit }, payload) {
+        commit('switchLoading', true, { root: true });
         firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(({ user }) => {
             if (this.state.developersUid.includes(user.uid)) {
@@ -44,8 +41,10 @@ const actions = {
                 })
                 commit('setLogged', true)
                 commit('setError', null)
+                commit('switchLoading', false)
                 router.push('/home')
             } else {
+                commit('switchLoading', false, { root: true });
                 commit('setError', "You are not a Coconut Developer!")
             }
         })
@@ -60,10 +59,12 @@ const actions = {
         router.push('/')
     },
     userAutoSignIn({ commit }, payload) {
+        commit('switchLoading', true, { root: true });
         commit('setUser', {
             ...payload
         })
         commit('setLogged', true)
+        commit('switchLoading', false, { root: true });
     },
 };
 
