@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers('createData')
+import { createNamespacedHelpers, mapState, mapGetters } from 'vuex'
+const { mapMutations } = createNamespacedHelpers('createData');
 export default {
     data() {
         return {
@@ -39,14 +39,15 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('setDataProgress', { index: 1 })
+        this.setDataProgress({ index: 1 });
     },
     computed: {
-        ...mapState(['Treatments', 'currentParam']),
-        ...mapGetters(['header'])
+        ...mapState(['currentParam']),
+        ...mapState('createData', ['Treatments']),
+        ...mapGetters(['header']),
     },
     methods: {
-        ...mapActions(['setPlaceData', 'setDataProgress', 'setImages']),
+        ...mapMutations(['setPlaceData', 'setDataProgress', 'setImages']),
         submitData() {
             this.setPlaceData(this.inputData)
             this.setDataProgress({ index: 2 });
@@ -57,6 +58,7 @@ export default {
             for (let i = 0; i < files.length; i++) {
                 this.images.push(files[i]);
             }
+            console.log(this.images);
             this.setImages(this.images);
         }
     }
@@ -82,14 +84,16 @@ export default {
             width: 40vw;
             height: 15vh;
         }
-        input {
+        %input {
             font-size: 1rem;
             width: 40vw;
         }
         input[type="text"], input[type="url"], input[type="file"]{
+            @extend %input;
             height: 5vh;
         }
         input[type="submit"] {
+            @extend %input;
             height: 10vh;
             margin-top: 4vh
         }

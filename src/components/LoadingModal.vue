@@ -13,7 +13,7 @@
             repeatCount="indefinite"/>
             </path>
         </svg>
-        <h4>데이터 업로드 중..</h4>
+        <h4>로딩중..</h4>
     </div>
   </transition>
 </template>

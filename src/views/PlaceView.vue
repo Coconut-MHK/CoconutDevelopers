@@ -10,23 +10,23 @@
         <small v-if="!isFirstPage">Progress: {{ progress.index }}/3</small>
         <hr width="15%" noshadow color="black">
         <transition :name="transitionName">
-            <router-view :componentFile="capitalizedParam" class="child-view"></router-view>
+            <router-view class="child-view"></router-view>
         </transition>
-        <modal-component></modal-component>
+        <loading-modal></loading-modal>
     </div>
 </template>
 
 <script>
-import ModalComponent from '../components/Modal.vue';
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers('createData')
+import LoadingModal from '../components/LoadingModal.vue';
+import { mapState, mapGetters, mapMutations } from 'vuex';
+
 
 export default {
     components: {
-        ModalComponent
+        LoadingModal
     },
-    created() {
-        this.setCurrentParam(this.$route.params.place)
+    mounted() {
+        this.setCurrentParam(this.$route.params.place);
     },
     data() {
         return {
@@ -34,10 +34,8 @@ export default {
         }
     },
     computed: {
-        ...mapState({
-            param: 'currentParam',
-            progress: 'dataProgress'
-        }),
+        ...mapState('createData', { progress: 'dataProgress' }),
+        ...mapState({ param: 'currentParam' }),
         ...mapGetters(['header', 'capitalizedParam']),
         isFirstPage() {
             return this.$route.meta.firstPage
@@ -49,10 +47,12 @@ export default {
             const fromDepth = from.path.split('/').length
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
             this.setCurrentParam(this.$route.params.place)
-        }
+        },
+
     },
     methods: {
-        ...mapActions(['setCurrentParam', 'setDataProgress']),
+        ...mapMutations(['setCurrentParam']),
+        ...mapMutations('createData', ['setDataProgress']),
         toDataInput() {
             this.setDataProgress({
                 status: true,
@@ -64,6 +64,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/css/Scheme.scss';
     .data-container {
         margin: 5vh 0 1vh 0;
         display: flex;
@@ -79,7 +80,7 @@ export default {
             width: 6vw;
             font-size: 0.8rem;
             text-decoration: none;
-            background:rgb(4, 153, 103);
+            background: $VueGreen;
             padding: 16px;
             margin: 2.5vh 0 5vh 0;
             transition: 0.5s;

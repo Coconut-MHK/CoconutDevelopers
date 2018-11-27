@@ -31,17 +31,17 @@ const mutations = {
 };
 
 const actions = {
-    userSignIn({ commit }, payload) {
+    userSignIn({ commit, state }, payload) {
         commit('switchLoading', true, { root: true });
         firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(({ user }) => {
-            if (this.state.developersUid.includes(user.uid)) {
+            if (state.developersUid.includes(user.uid)) {
                 commit('setUser', {
                     ...user
                 })
                 commit('setLogged', true)
                 commit('setError', null)
-                commit('switchLoading', false)
+                commit('switchLoading', false, { root: true});
                 router.push('/home')
             } else {
                 commit('switchLoading', false, { root: true });
@@ -53,10 +53,10 @@ const actions = {
         })
     },
     userSignOut({ commit }) {
+        router.push('/login')
         firebase.auth().signOut()
-        commit('setUser', null)
         commit('setLogged', false)
-        router.push('/')
+        commit('setUser', null)
     },
     userAutoSignIn({ commit }, payload) {
         commit('switchLoading', true, { root: true });

@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers('createData')
+import { createNamespacedHelpers, mapState } from 'vuex'
+const { mapGetters, mapMutations } = createNamespacedHelpers('createData')
 export default {
     data() {
         return {
@@ -36,7 +36,7 @@ export default {
         ...mapGetters(['treatmentList'])
     },
     methods: {
-        ...mapActions(['setPlaceData', 'setDataProgress']),
+        ...mapMutations(['setPlaceData', 'setDataProgress']),
         toDoctorsInput() {
             this.setPlaceData({ treatments: this.treatments })
         }

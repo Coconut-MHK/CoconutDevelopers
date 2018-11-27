@@ -29,6 +29,7 @@ const routes = [
         children: [
           {
             path: '',
+            name: 'DataView',
             component: () => import('../views/DataView.vue'),
             meta: { firstPage: true }
           },

@@ -1,16 +1,16 @@
 <template>
-    <div class="login">
-        <h1>COCONUT DEVELOPER'S PAGE</h1>
+    <div class="login-container">
+        <h1 class="login-title">COCONUT DEVELOPER'S PAGE</h1>
         <hr width="30%" color="white" noshadow>
         <div class="input-container">
-            <label>Email</label>
-            <input type="text" placeholder="Email" v-model="email"><br>
+            <label class="input-label">Email</label>
+            <input class="input-login" type="text" v-model="email"><br>
         </div>
         <div class="input-container">
-            <label>Password</label>
-            <input type="password" placeholder="Password" v-model="password"><br>
+            <label class="input-label">Password</label>
+            <input class="input-password" type="password" v-model="password"><br>
         </div>
-        <button :disabled="loading" @click="login">Login</button>
+        <button class="login-button box-shadow" :disabled="loading" @click="login">Login</button>
         <p v-if="alert">{{ error }}</p>
     </div>
 </template>
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .login {
+    .login-container {
         background: rgb(4, 153, 103);
         color: white;
         height: 100%;
@@ -63,14 +63,19 @@ export default {
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        button {
+        .login-button {
             margin-top: 20px;
-            width: 10%;
-            height: auto;
+            padding: 0.5rem 3rem;
             font-size: 1.1rem;
             border: none;
             cursor: pointer;
             border-radius: 1rem;
+            &:focus {
+                outline: none;
+            }
+            &:active {
+                box-shadow: none;
+            }
         }
         hr {
             margin-bottom: 6vh;
@@ -79,15 +84,26 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            label {
-                margin: 0 0 5px 2px;
+            .input-label {
+                margin: 0 0 0 2px;
                 font-weight: bold;
             }
-            input {
+            .input-login, .input-password {
                 margin-bottom: 10px;
                 width: 20vw;
-                padding: 15px;
+                padding: 15px 15px 10px 5px;
                 font-size: 1rem;
+                background: none;
+                border: none;
+                border-bottom: 2px solid white;
+                caret-color: white;
+                color: white;
+                &::placeholder {
+                    color: white;
+                }
+                &:focus {
+                    outline: none;
+                }
             }
         }
     }

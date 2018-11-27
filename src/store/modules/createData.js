@@ -9,7 +9,6 @@ const state = {
     images: null,
     placeData: {},
     doctorsData: null,
-    currentParam: null,
     hospitalTreatments: [
         '공황장애', 
         '니코딘중독', 
@@ -55,18 +54,8 @@ const state = {
 };
 
 const getters = {
-    header: state => {
-        if (state.currentParam === 'hospital') {
-           return "정신과 병원"
-       } else if (state.currentParam === 'center') {
-           return '심리상담센터'
-       }
-   },
-   capitalizedParam: state => {
-       return state.currentParam.charAt(0).toUpperCase() + state.currentParam.slice(1);
-   },
-   treatmentList: state => {
-       return state.currentParam == 'hospital'
+   treatmentList: rootState => {
+       return rootState.currentParam == 'hospital'
            ? state.hospitalTreatments
            : state.centerTreatments
    }
@@ -74,9 +63,13 @@ const getters = {
 
 const mutations = {
     setPlaceData(state, payload) {
-        state.placeData = {
-            ...state.placeData,
-            ...payload
+        if (!payload) {
+            state.placeData = {};
+        } else {
+            state.placeData = {
+                ...state.placeData,
+                ...payload
+            };
         }
     },
     setDoctorsData(state, payload) {
@@ -91,17 +84,11 @@ const mutations = {
             ...payload
         }
     },
-    setCurrentParam(state, payload) {
-        state.currentParam = payload
-    },
-    switchLoading({ rootState }, payload) {
-        rootState.loading = payload;
-    }
 };
 
 const actions = {
-    createDoctorData(state, placeId) {
-        const doctors = this.state.doctorsData;
+    createDoctorData({ state }, placeId) {
+        const doctors = state.doctorsData;
         for (let doctor of doctors) {
             const ref = firebase.database().ref(`doctors/${placeId}/`).push();
             const doctorId = ref.key;
@@ -111,40 +98,45 @@ const actions = {
             })
         }
     },
-    createPlaceData({ commit }, payload) {
+    async createPlaceData({ state, commit, dispatch }, payload) {
         const { reference } = payload;
-        const images = this.state.images;
+        const { images, placeData } = state;
 
-        commit('switchLoading', true);
+        commit('switchLoading', true, { root: true });
         const ref = firebase.database().ref(`${reference}Information/`).push();
         const placeId = ref.key;
         ref.set({
-            ...this.state.placeData,
+            ...placeData,
             placeId,
-            images: ""
+            images: "",
+            imageTitles: ""
         })
 
         // Creating Doctor DB Information
-        this.dispatch('createDoctorData', placeId)
+        dispatch('createDoctorData', placeId);
 
         // Uploading Images to Place DB
         for (let item of images) {
             const itemIndex = images.indexOf(item).toString();
-            firebase.storage().ref(`/${reference}/${placeId}`).put(item)
+            firebase.storage().ref().child(`${reference}/${placeId}/${item.name}`).put(item)
                 .then(response => {
                     return response.ref.getDownloadURL()
                 })
                 .then(url => {
                     firebase.database().ref(`${reference}Information/${placeId}/images`).update({
-                        [itemIndex]: url
+                        [itemIndex]: url,
+                    })
+                    firebase.database().ref(`${reference}Information/${placeId}/imageTitles`).update({
+                        [itemIndex]: item.name,
                     })
                 })
                 .then(() => {
                     if (itemIndex == images.length - 1) {
-                        commit('setImages', []);
-                        commit('switchLoading', false);
-                        router.push('/home/data/hopsital/')
-                        
+                        commit('setImages', null);
+                        commit('setDoctorsData', null);
+                        commit('setPlaceData', false);
+                        commit('switchLoading', false, { root: true });
+                        router.push('/home')
                     }
                 })   
                 .catch(error => console.log(error)) 

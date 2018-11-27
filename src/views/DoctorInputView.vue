@@ -58,14 +58,14 @@
             </div>
             <button v-if="!isEmpty" class="confirm-button box-shadow" @click="sendDataToStore">확인</button>
         </div>
-        <modal></modal>
+        <loading-modal></loading-modal>
     </div>
 </template>
 
 <script>
-import Modal from '../components/Modal.vue';
+import LoadingModal from '../components/LoadingModal.vue';
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions } = createNamespacedHelpers('createData')
+const { mapActions, mapMutations } = createNamespacedHelpers('createData')
 export default {
     data() {
         return {
@@ -85,7 +85,7 @@ export default {
         this.setDataProgress({ index: 3 });
     },
     components: {
-        Modal
+        LoadingModal
     },
     computed: {
         isEmpty() {
@@ -108,7 +108,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['setDoctorsData', 'createPlaceData']),
+        ...mapActions(['createPlaceData']),
+        ...mapMutations(['setDoctorsData','setDataProgress']),
         addDoctorData() {
             this.doctorData.push({
                 ...this.doctorInput,
@@ -205,7 +206,7 @@ export default {
                 }
             }
             .confirm-button {
-                margin-top: 1.5vh;
+                margin: 5vh 0;
                 padding: 1vh 2vw;
                 background: $VueGreen;
                 color: white;

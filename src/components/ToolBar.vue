@@ -6,7 +6,7 @@
     <div class="router router-container">
         <router-link to="/home/data/hospital">정신과 데이터 관리</router-link>
         <router-link to="/home/data/center">상담센터 데이터</router-link>
-        <router-link to="/home/reports">신고된 포스트 / 회원 관리</router-link>
+        <router-link to="#">신고된 포스트 / 회원 관리</router-link>
         <button @click="userSignOut">로그아웃</button>
     </div>
   </div>
@@ -17,23 +17,26 @@ import { mapActions } from 'vuex';
 
 export default {
     methods: {
-        ...mapActions(['auth/userSignOut'])
-    }
+        ...mapActions('auth', ['userSignOut'])
+    },
 }
 </script>
 
 <style lang="scss" scoped>
-/* .logo {
-    width: 50px;
-    height: 50px;
-    margin-right: 18px;
-} */
-.logo-container, .router{
+@import '../assets/css/Scheme.scss';
+%font-style {
     font-weight: bold;
+}
+.logo-container, .router {
+    @extend %font-style;
     margin: 6px;
 }
+.logo-container a {
+    text-decoration: none;
+    color: white;
+}
 .header {
-    background-color:rgb(4, 153, 103);
+    background-color: $VueGreen;
     display: flex;
     align-items: center;
     color: white;
@@ -45,10 +48,9 @@ export default {
     display: flex;
     justify-content: flex-end;
     font-size: 12px;
-    font-weight: bold;
     button {
+        @extend %font-style;
         color: white;
-        font-weight: bold;
         font-size: 12px;
         margin: 0 18px;
         background: none;
@@ -59,17 +61,17 @@ export default {
             color: black;
         }
     }
-    a.router-link-active {
-        color: black;
+    a {
+        text-decoration: none;
+        color: white;
+        margin-right: 18px;
+        margin-left: 18px;
+        transition-duration: 0.25s;
+        &:hover {
+            color: black;
+        }
     }
-}
-.router a{
-    text-decoration: none;
-    color: white;
-    margin-right: 18px;
-    margin-left: 18px;
-    transition-duration: 0.25s;
-    &:hover {
+    a.router-link-active {
         color: black;
     }
 }
