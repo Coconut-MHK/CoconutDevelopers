@@ -1,7 +1,17 @@
-# Coconut Developers
+# Coconut Developers [Mental Health Korea - Coconut]
+
 A Platform for Coconut developers to conveniently CRUD hospital/center data and manage user data.
 
+Uses Firebase for database.
+
+Please include your coconut Uid into the Auth.js file inside Vuex store in order to gain access to the functionalities.
+
 Omitted FirebaseConfig.js due to security reasons.
+
+In development stage - provided functionalities:
+  - view current hospital/center data;
+  - create new hospital/center data along with doctors information;
+  - delete selected hospital/center data along with doctors information;
 
 ## Project setup
 ```
