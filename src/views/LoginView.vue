@@ -1,5 +1,6 @@
 <template>
     <div class="login-container">
+        <LoadingModal v-if="loading"/>
         <h1 class="login-title">COCONUT DEVELOPER'S PAGE</h1>
         <hr width="30%" color="white" noshadow>
         <div class="input-container">
@@ -17,8 +18,12 @@
 
 <script>
 import { mapState } from 'vuex';
+import LoadingModal from '@/components/LoadingModal.vue';
 export default {
-    name: 'login',
+    name: 'loginView',
+    components: {
+        LoadingModal
+    },
     data() {
         return {
             email: '',
