@@ -38,6 +38,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
+    name: 'Doctor-Modal',
     props: {
         isDisplayed: Boolean,
         placeId: String

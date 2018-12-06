@@ -22,6 +22,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex';
 
 
 export default {
+    name: 'PlaceView',
     components: {
         LoadingModal
     },

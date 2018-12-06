@@ -25,6 +25,7 @@
 import { createNamespacedHelpers, mapState, mapGetters } from 'vuex'
 const { mapMutations } = createNamespacedHelpers('createData');
 export default {
+    name: 'Place-Input-View',
     data() {
         return {
             images: [],

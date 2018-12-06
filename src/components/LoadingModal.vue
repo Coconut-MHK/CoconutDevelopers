@@ -21,9 +21,10 @@
 <script>
 import { mapState } from 'vuex';
 export default {
-    computed: {
-        ...mapState(['loading'])
-    }
+  name: 'Loading-Modal',
+  computed: {
+      ...mapState(['loading'])
+  }
 }
 </script>
 

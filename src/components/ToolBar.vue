@@ -6,7 +6,6 @@
     <div class="router router-container">
         <router-link to="/home/data/hospital">정신과 데이터 관리</router-link>
         <router-link to="/home/data/center">상담센터 데이터</router-link>
-        <router-link to="#">신고된 포스트 / 회원 관리</router-link>
         <button @click="userSignOut">로그아웃</button>
     </div>
   </div>
@@ -16,6 +15,7 @@
 import { mapActions } from 'vuex';
 
 export default {
+    name: 'ToolBar',
     methods: {
         ...mapActions('auth', ['userSignOut'])
     },

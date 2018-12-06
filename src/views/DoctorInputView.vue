@@ -67,6 +67,7 @@ import LoadingModal from '../components/LoadingModal.vue';
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapMutations } = createNamespacedHelpers('createData')
 export default {
+    name: 'Doctor-Input-View',
     data() {
         return {
             doctorInput: {

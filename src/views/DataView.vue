@@ -39,6 +39,7 @@ import { mapState, mapActions, mapMutations } from 'vuex';
 import DoctorModal from '../components/DoctorModal.vue';
 import ConfirmModal from '../components/ConfirmModal.vue';
 export default {
+    name: 'DataView',
     components: {
         DoctorModal,
         ConfirmModal

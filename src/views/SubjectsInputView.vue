@@ -23,6 +23,7 @@
 import { createNamespacedHelpers, mapState } from 'vuex'
 const { mapGetters, mapMutations } = createNamespacedHelpers('createData')
 export default {
+    name: 'Subjects-Input-View',
     data() {
         return {
             treatments: []

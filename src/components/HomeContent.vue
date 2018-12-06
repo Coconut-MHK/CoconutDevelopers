@@ -11,6 +11,7 @@
 <script>
 import { mapState } from 'vuex';
 export default {
+    name: 'Home-Content',
     computed: mapState('auth', ['user']),
 }
 </script>
