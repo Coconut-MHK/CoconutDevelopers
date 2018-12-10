@@ -29,7 +29,10 @@
           {{ place.websiteUrl }}
         </small>
         <br>
-        <p>진료항목:</p>
+        <small>
+          <b>진료항목:</b>
+          {{ stringfyList(place.treatments) }}
+        </small>
       </div>
     </div>
     <doctor-modal
@@ -82,6 +85,9 @@ export default {
       } else if (direction === "delete") {
         this.displayConfirmModal = true;
       }
+    },
+    stringfyList(array) {
+      return array.join(", ");
     }
   },
   watch: {
