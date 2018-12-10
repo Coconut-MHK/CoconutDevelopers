@@ -35,12 +35,12 @@ export default {
   },
   methods: {
     ...mapActions("deleteData", ["deletePlaceAndDoctorData"]),
-    deleteData() {
-      this.deletePlaceAndDoctorData({
+    async deleteData() {
+      await this.deletePlaceAndDoctorData({
         reference: this.param,
         placeId: this.placeId
       });
-      this.$emit("closeModal");
+      return this.$emit("closeModal");
     },
     closeModal() {
       this.$emit("closeModal");
