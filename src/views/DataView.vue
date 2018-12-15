@@ -120,7 +120,7 @@ export default {
     min-width: 400px;
     margin-bottom: 5vh;
     text-align: left;
-    padding: 0 1vw;
+    padding: 0 1vw 1.5vh 1vw;
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
